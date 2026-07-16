@@ -51,6 +51,22 @@ describe('PATCH /api/todos/:id', () => {
     })
     expect(res.status).toBe(404)
   })
+
+  it('title이 공백이면 400을 반환한다', async () => {
+    const createRes = await fetch('/api/todos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: '할 일' }),
+    })
+    const created = await createRes.json()
+
+    const res = await fetch(`/api/todos/${created.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: '   ' }),
+    })
+    expect(res.status).toBe(400)
+  })
 })
 
 describe('DELETE /api/todos/:id', () => {

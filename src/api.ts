@@ -4,6 +4,7 @@ const BASE = '/api/todos'
 
 export async function getTodos(): Promise<Todo[]> {
   const res = await fetch(BASE)
+  if (!res.ok) throw new Error('failed to fetch todos')
   return res.json()
 }
 

@@ -11,11 +11,14 @@ export const handlers = [
     if (!body.title || !body.title.trim()) {
       return HttpResponse.json({ message: 'title is required' }, { status: 400 })
     }
-    return HttpResponse.json(create(body.title), { status: 201 })
+    return HttpResponse.json(create(body.title.trim()), { status: 201 })
   }),
 
   http.patch('/api/todos/:id', async ({ params, request }) => {
     const body = (await request.json()) as { title?: string; completed?: boolean }
+    if (body.title !== undefined && !body.title.trim()) {
+      return HttpResponse.json({ message: 'title is required' }, { status: 400 })
+    }
     const updated = update(params.id as string, body)
     if (!updated) {
       return HttpResponse.json({ message: 'not found' }, { status: 404 })
